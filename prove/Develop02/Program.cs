@@ -7,3 +7,81 @@ class Program
         Console.WriteLine("Hello Develop02 World!");
     }
 }
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+// Class 1: Entry
+public class Entry
+{
+    public string Prompt { get; set; }
+    public string Response { get; set; }
+    public DateTime Date { get; set; }
+
+    public Entry(string prompt, string response)
+    {
+        Prompt = prompt;
+        Response = response;
+        Date = DateTime.Now;
+    }
+
+    public override string ToString()
+    {
+        return $"{Date.ToString("yyyy-MM-dd")}|{Prompt}|{Response}";
+    }
+}
+
+// Class 2: Journal
+public class Journal
+{
+    private List<Entry> entries;
+    private List<string> prompts;
+
+    public Journal()
+    {
+        entries = new List<Entry>();
+        prompts = new List<string>
+        {
+            "What did you learn today?",
+            "What are you grateful for?",
+            "What are your goals for tomorrow?",
+            "What did you accomplish today?",
+            "What are you looking forward to?"
+        };
+    }
+
+    public void AddEntry()
+    {
+        var prompt = prompts[new Random().Next(prompts.Count)];
+        Console.Write($"Prompt: {prompt}\nResponse: ");
+        var response = Console.ReadLine();
+        var entry = new Entry(prompt, response);
+        entries.Add(entry);
+    }
+
+    public void DisplayEntries()
+    {
+        foreach (var entry in entries)
+        {
+            Console.WriteLine(entry.ToString());
+        }
+    }
+
+    public void SaveToFile(string filename)
+    {
+        using (var writer = new StreamWriter(filename))
+        {
+            foreach (var entry in entries)
+            {
+                writer.WriteLine(entry.ToString());
+            }
+        }
+    }
+
+    public void LoadFromFile(string filename)
+    {
+        entries.Clear();
+        using (var reader = new StreamReader(filename))
+        {
+            string line
